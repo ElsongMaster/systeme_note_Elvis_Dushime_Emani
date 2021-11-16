@@ -17,13 +17,32 @@
 
     <script src="{{asset('js/app.js')}}"></script>
 
-    {{-- <script>
-        var btnLike = document.getElementById('like');
-        var btnDislike = document.getElementById('dislike');
-        function like(){
-            var spanCpt = document.getElementById('cpt');
-            spanCpt.innerText = spanCpt.innerText + 1;
+    <script>
+        var tabBtnCloses = Array.from(document.getElementsByClassName("close"));
+            console.log(tabBtnCloses);
+        tabBtnCloses.forEach((elt) => {
+            elt.addEventListener("click", () => {
+                elt.parentNode.classList.add("hidden");
+            });
+        });
+
+        var form = document.getElementById('formShare');
+        console.log(form);
+        var btnShare = document.getElementById('share');
+
+        btnShare.addEventListener('click',()=>{
+            form.classList.toggle('hidden')
+        })
+
+    </script>
+    <style>
+        #formShare{
+            transition: 0.2s;
         }
-    </script> --}}
+
+        .hidden{
+            display:none;
+        }
+    </style>
 </body>
 </html>

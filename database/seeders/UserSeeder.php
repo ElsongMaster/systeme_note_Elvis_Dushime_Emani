@@ -21,6 +21,12 @@ class UserSeeder extends Seeder
                 "email"=>"Els@gmail.com",
                 "role_id"=>1,
                 "password"=>Hash::make("test"),
+            ],
+            [
+                "name"=>"picolo",
+                "email"=>"picolo@gmail.com",
+                "role_id"=>2,
+                "password"=>Hash::make("test"),
             ]
         ]);
     }

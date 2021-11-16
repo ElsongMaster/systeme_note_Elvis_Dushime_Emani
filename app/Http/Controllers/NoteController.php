@@ -8,6 +8,7 @@ use App\Models\NoteUser;
 use App\Models\NoteUserliked;
 use App\Models\RolenoteUserNote;
 use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -53,9 +54,11 @@ class NoteController extends Controller
         $note = new Note;
         $rolenote_use_note= new RolenoteUserNote;
 
+        $note->auteurId = Auth::user()->id;
         $note->titre = $rq->titre;
         $note->texte = $rq->texte;
         $note->save();
+
         $rolenote_use_note->user_id = Auth::user()->id;
         $rolenote_use_note->note_id = $note->id;
         $rolenote_use_note->rolenote_id = 1;
@@ -180,9 +183,51 @@ class NoteController extends Controller
     }
 
     public function dislikes($noteId){
+        $tabUserLiked = [];
         $userId = Auth::user()->id;
-        $rowLine =  NoteUserliked::where('note_id','=',$noteId)->where('user_id','=',$userId);
-        $rowLine->delete();
+        $noteUserLiked = NoteUserliked::where('note_id','=',$noteId)->get();
+        foreach( $noteUserLiked as  $rowLine){
+            array_push($tabUserLiked,$rowLine->user_id);
+        }
+        if(in_array($userId,$tabUserLiked)){
+            
+            $rowLine =  NoteUserliked::where('note_id','=',$noteId)->where('user_id','=',$userId);
+            $rowLine->delete();
+        }
+
         return redirect()->back() ;
     }
+
+
+    public function share(Request $rq,$noteId){
+
+        $userCollection = User::where('email','=',$rq->email)->get();
+        $msg = "Cette adresse n'appartient à aucun utilisateur";
+        $tag = "error";
+        if($userCollection->count() === 1){
+            $user = $userCollection[0];
+            //verif si l'user est déjà éditeur
+            $userEditeurNoteCollection = RolenoteUserNote::where('note_id','=',$noteId)->where('rolenote_id','=',2)->where('user_id','=',2)->get();
+            if($userEditeurNoteCollection->count() == 0){
+
+                $tag = "success";
+                $msg = "Note partagé correctement à l'utilisateur";
+                $rolenoteusernote = new RolenoteUserNote;
+                $rolenoteusernote->user_id = $user->id;
+                $rolenoteusernote->note_id = $noteId;
+                $rolenoteusernote->rolenote_id = 2;
+                $rolenoteusernote->save();
+            }else{
+
+                $tag = "error";
+                $msg = "Cette note à déjà été partagé à cette user";
+
+            }
+
+        }
+
+        return redirect()->back()->with($tag,$msg);
+    }
+
+
 }

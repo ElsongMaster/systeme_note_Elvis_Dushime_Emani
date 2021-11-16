@@ -58,7 +58,7 @@
         console.log(tabBtnCloses);
     tabBtnCloses.forEach((elt) => {
         elt.addEventListener("click", () => {
-            elt.parentNode.classList.add("hidden-msg");
+            elt.parentNode.classList.add("hidden");
         });
     });
 
@@ -66,7 +66,11 @@
 
 
     <style>
-        .hidden-select{
+        #formShare{
+            transition: 0.5s;
+        }
+
+        .hidden{
             display:none;
         }
     </style>
