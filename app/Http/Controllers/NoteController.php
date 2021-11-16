@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Note;
 use App\Models\NoteTag;
 use App\Models\NoteUser;
+use App\Models\NoteUserliked;
 use App\Models\RolenoteUserNote;
 use App\Models\Tag;
 use Illuminate\Http\Request;
@@ -19,7 +20,8 @@ class NoteController extends Controller
      */
     public function index()
     {
-        //
+        $notes = Note::all();
+        return view('back.note.allnote',compact('notes'));
     }
 
     /**
@@ -63,7 +65,7 @@ class NoteController extends Controller
             $note_tag = new NoteTag;
             $note_tag->note_id = $note->id;
             $note_tag->tag_id = intval($tagId);
-             $note_tag->save();
+            $note_tag->save();
  
         }
 
@@ -89,7 +91,12 @@ class NoteController extends Controller
      */
     public function edit(Note $note)
     {
-        //
+        $tags = Tag::all();
+        $tagIds = [];
+        foreach($note->tags as $tag){
+            array_push($tagIds,$tag->id);
+        }
+        return view('back.note.edit',compact('note','tagIds','tags'));
     }
 
     /**
@@ -99,9 +106,38 @@ class NoteController extends Controller
      * @param  \App\Models\Note  $note
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Note $note)
+    public function update(Request $rq, Note $note)
     {
-        //
+        
+        $rq->validate([
+            "titre"=>["required"],
+            "texte"=>["required"],
+            "tags"=>["required"]
+        ]);
+
+
+
+
+        $note->titre = $rq->titre;
+        $note->texte = $rq->texte;
+        $note->save();
+
+
+
+        $note_tags = NoteTag::where('note_id','=',$note->id)->get();
+        foreach($note_tags as $rowData){
+            $rowData->delete();
+        }
+
+        foreach($rq->tags as $tagId){
+            $note_tag = new NoteTag; 
+            $note_tag->note_id = $note->id;
+            $note_tag->tag_id = intval($tagId);
+            $note_tag->save();
+ 
+        }
+
+        return redirect()->route('notes.index')->with('success','data de la note correctement update');
     }
 
     /**
@@ -112,6 +148,41 @@ class NoteController extends Controller
      */
     public function destroy(Note $note)
     {
-        //
+        $notesToDelete = RolenoteUserNote::where('note_id','=',$note->id)->get();
+        foreach($notesToDelete as $rowData){
+            $rowData->delete();
+        }
+        $note->delete();
+
+        return redirect()->back()->with('success','notes correctement supprimer');
+    }
+
+
+
+    public function likes($noteId){
+        $tabUserLiked = [];
+        $userId = Auth::user()->id;
+        $noteUserLiked = NoteUserliked::where('note_id','=',$noteId)->get();
+        foreach( $noteUserLiked as  $rowLine){
+            array_push($tabUserLiked,$rowLine->user_id);
+        }
+        // dd(!in_array($userId,$tabUserLiked));
+
+        if(!in_array($userId,$tabUserLiked)){
+            $noteUserLiked = new NoteUserliked;
+            $noteUserLiked->note_id = $noteId;
+            $noteUserLiked->user_id = $userId;
+            $noteUserLiked->save();
+        }
+        
+        return redirect()->back() ;
+
+    }
+
+    public function dislikes($noteId){
+        $userId = Auth::user()->id;
+        $rowLine =  NoteUserliked::where('note_id','=',$noteId)->where('user_id','=',$userId);
+        $rowLine->delete();
+        return redirect()->back() ;
     }
 }

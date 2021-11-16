@@ -16,5 +16,14 @@
 
 
     <script src="{{asset('js/app.js')}}"></script>
+
+    {{-- <script>
+        var btnLike = document.getElementById('like');
+        var btnDislike = document.getElementById('dislike');
+        function like(){
+            var spanCpt = document.getElementById('cpt');
+            spanCpt.innerText = spanCpt.innerText + 1;
+        }
+    </script> --}}
 </body>
 </html>

@@ -18,6 +18,10 @@ class CreateRolenoteUserNotesTable extends Migration
             $table->foreignId('rolenote_id')->constrained('rolenotes','id');
             $table->foreignId('user_id')->constrained('users','id');
             $table->foreignId('note_id')->constrained('notes','id');
+            $table->dropForeign('rolenote_user_notes_note_id_foreign');
+            $table->dropForeign('rolenote_user_notes_user_id_foreign');
+            $table->dropForeign('rolenote_user_notes_rolenote_id_foreign');
+
             $table->timestamps();
         });
     }

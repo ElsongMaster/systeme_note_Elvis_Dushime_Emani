@@ -17,6 +17,7 @@ class CreateNoteTagsTable extends Migration
             $table->id();
             $table->foreignId("note_id")->constrained('notes','id');
             $table->foreignId("tag_id")->constrained('tags','id');
+            $table->dropForeign('note_tags_note_id_foreign');
             $table->timestamps();
         });
     }
