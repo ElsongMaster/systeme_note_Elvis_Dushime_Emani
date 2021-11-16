@@ -5,7 +5,7 @@
 
 
 @section('content')
-    <h1 class="text-center">Pages principales</h1>
+    <h1 class="text-center">Pages des notes persos</h1>
 
 
 
@@ -16,10 +16,10 @@
         <div class="container">
             @include('back.partials.flash-message')
             @foreach ($notes as $note )
-
+            @can('auteur_note', $note->auteurId)
                 <div class="card" style="width: 100%;">
                     <div class="auteur pt-3 ps-3">
-                       <p><span class="text-decoration-underline">Auteur:</span> {{App\Models\User::find($note->auteurId)->name}}</p> 
+                    <p><span class="text-decoration-underline">Auteur:</span> {{App\Models\User::find($note->auteurId)->name}}</p> 
                     </div>
                     <div class="card-body">
                         <h5 class="card-title text-center">{{$note->titre}}</h5>
@@ -32,7 +32,7 @@
                             @endforeach
                         </div>
                         <div class="contentLike d-flex justify-content-evenly w-25 mx-auto pt-3">
-    
+
                             <a href="{{Auth::check()?route('notes.like',$note->id):route('login')}}" id="like" class="btn btn-info "><i class="far fa-thumbs-up text-light pe-1"></i>+1</a>
                             <span id="cpt" class=" fs-4">{{$note->userslikeds->count()}}</span>
                             <a href="{{Auth::check()?route('notes.dislike',$note->id):route('login')}}" id="dislike" class="btn btn-info"><i class="far fa-thumbs-down text-light pe-1"></i>-1</a>
@@ -49,6 +49,7 @@
                         </form>
                     </div>
                 </div>
+            @endcan
             @endforeach
         </div>
     </div>

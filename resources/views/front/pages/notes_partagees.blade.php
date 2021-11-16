@@ -5,7 +5,7 @@
 
 
 @section('content')
-    <h1 class="text-center">Pages principales</h1>
+    <h1 class="text-center">Pages des notes partgagées</h1>
 
 
 
@@ -15,7 +15,7 @@
         <h2>Liste des notes</h2>
         <div class="container">
             @include('back.partials.flash-message')
-            @foreach ($notes as $note )
+            @foreach ($notespartagees as $note )
 
                 <div class="card" style="width: 100%;">
                     <div class="auteur pt-3 ps-3">

@@ -1,9 +1,9 @@
 <nav class="d-flex justify-content-end  w-100 sticky-top" >
     <ul class="navbar  list-unstyled w-50 ">
-        <li class="nav-item"><a class="nav-link" href="">Home</a></li>
-        <li class="nav-item"><a class="nav-link" href="">Notes </a></li>
-        <li class="nav-item"><a class="nav-link" href="">Notes partagée</a></li>
-        <li class="nav-item"><a class="nav-link" href="">Notes likés</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{route('index')}}">Globale</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{route('notespersos')}}">Notes persos </a></li>
+        <li class="nav-item"><a class="nav-link" href="{{route('notespartagees')}}">Notes partagée</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{route('noteslikees')}}">Notes likés</a></li>
 
         @if (Route::has('login'))
             @auth

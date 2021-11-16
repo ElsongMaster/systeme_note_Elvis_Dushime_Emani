@@ -24,7 +24,8 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
-
-        //
+         Gate::define('auteur_note', function($userConnected,$auteurNoteID){
+           return $userConnected->id === $auteurNoteID ;
+         });
     }
 }

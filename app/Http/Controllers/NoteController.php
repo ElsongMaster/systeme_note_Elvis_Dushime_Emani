@@ -11,6 +11,7 @@ use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class NoteController extends Controller
 {
@@ -33,6 +34,7 @@ class NoteController extends Controller
     public function create()
     {
         $tags = Tag::all();
+
        return view('back.note.create',compact('tags'));
     }
 
@@ -57,6 +59,7 @@ class NoteController extends Controller
         $note->auteurId = Auth::user()->id;
         $note->titre = $rq->titre;
         $note->texte = $rq->texte;
+        $note->shared = null;
         $note->save();
 
         $rolenote_use_note->user_id = Auth::user()->id;
@@ -217,6 +220,9 @@ class NoteController extends Controller
                 $rolenoteusernote->note_id = $noteId;
                 $rolenoteusernote->rolenote_id = 2;
                 $rolenoteusernote->save();
+                $noteShared = Note::find($noteId);
+                $noteShared->shared = true;
+                $noteShared->save();
             }else{
 
                 $tag = "error";

@@ -18,6 +18,7 @@ class CreateNotesTable extends Migration
             $table->integer('auteurId');
             $table->string('titre');
             $table->string('texte');
+            $table->boolean('shared')->nullable();
             $table->timestamps();
         });
     }
