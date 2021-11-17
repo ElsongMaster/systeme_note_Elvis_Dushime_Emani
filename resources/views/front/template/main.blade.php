@@ -26,13 +26,45 @@
             });
         });
 
-        var form = document.getElementById('formShare');
-        console.log(form);
-        var btnShare = document.getElementById('share');
+        var Tabform = document.querySelectorAll('.formShare');
+        var TabBtnShare = Array.from(document.querySelectorAll('.share'));
+        // var classNameForm;
+        // var classNameBtn;
+        console.log(TabBtnShare)
+        for(var i=0;i<Tabform.length;i++){
+            // classNameForm = 'formShare'+i;
+            // classNameBtn = 'share'+i;
+            // Tabform[i].classList.add(classNameForm);
+            // TabBtnShare[i].classList.add(classNameBtn);
+            console.log(Tabform[i])
+            TabBtnShare[i].addEventListener('click',(e)=>{
 
-        btnShare.addEventListener('click',()=>{
-            form.classList.toggle('hidden')
-        })
+                
+                Tabform[TabBtnShare.indexOf(e.target)].classList.toggle('hidden')
+            })
+            
+        }
+
+        // btnShare.addEventListener('click',()=>{
+        //     form.classList.toggle('hidden')
+        // })
+        // console.log(document.querySelectorAll('.ckeditor'))
+        if(document.querySelectorAll('.ckeditor') != undefined) {
+           var stringToHTML = function (str) {
+                var parser = new DOMParser();
+                var doc = parser.parseFromString(str, 'text/html');
+                return doc.body;
+            };
+            var Tabnode = Array.from(document.getElementsByClassName('ckeditor'));
+            Tabnode.forEach(pnode =>{
+
+                var node = stringToHTML(pnode.textContent);
+    
+                pnode.innerHTML = node.innerHTML;
+            })
+ 
+
+        }  
 
     </script>
     <style>

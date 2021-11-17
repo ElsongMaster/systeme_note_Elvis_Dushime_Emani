@@ -32,10 +32,15 @@
     <label for="titre" class="form-label">Titre</label>
     <input type="text" value = "{{$note->titre}}"   class="form-control" id="titre" name="titre" >
 </div>
-<div class="mb-3">
+{{-- <div class="mb-3">
     <label for="texte" class="form-label">Texte </label>
     <input type="text" value = "{{$note->texte}}"   class="form-control" id="texte" name="texte" >
-</div>
+</div> --}}
+
+<textarea  name="texte">{{$note->texte}}</textarea>
+<script>
+        CKEDITOR.replace( 'texte' );
+</script>
 <div class="mb-3">
     <label for="tags" class="form-label">Tags</label>
     <select  id="mon-select"  class="selectpicker" multiple name="tags[]" id="tags" >

@@ -26,6 +26,7 @@ Route::resource('notes', NoteController::class)->middleware(['auth']);
 Route::get('/like/{noteId}', [NoteController::class,'likes'])->middleware(['auth'])->name('notes.like');
 Route::get('/dislike/{noteId}', [NoteController::class,'dislikes'])->middleware(['auth'])->name('notes.dislike');
 Route::post('/share/{noteId}', [NoteController::class,'share'])->middleware(['auth'])->name('notes.share');
+Route::post('/filter', [NoteController::class,'filter'])->middleware(['auth'])->name('notes.filter');
 Route::get('/back',[BackHomeController::class,'index'])->middleware(['auth'])->name('back');
 Route::get('/notesLikees',[NoteslikeesController::class,'index'])->middleware(['auth'])->name('noteslikees');
 Route::get('/notesPartagees',[NotespartageesController::class,'index'])->middleware(['auth'])->name('notespartagees');

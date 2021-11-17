@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Note;
 use App\Models\NoteTag;
 use App\Models\NoteUser;
+use App\Models\NoteUserdisliked;
 use App\Models\NoteUserliked;
 use App\Models\RolenoteUserNote;
 use App\Models\Tag;
@@ -22,7 +23,8 @@ class NoteController extends Controller
      */
     public function index()
     {
-        $notes = Note::all();
+          $notes =Note::select("notes.*",DB::raw('count(note_userlikeds.id) as nbLike'))->join("note_userlikeds","note_userlikeds.note_id","=","notes.id","left outer")->groupBy("notes.id")->orderBy("nbLike","desc")->get();
+
         return view('back.note.allnote',compact('notes'));
     }
 
@@ -123,9 +125,10 @@ class NoteController extends Controller
 
 
 
-
+        $tabChars = htmlentities($rq->texte);
+        // dd($tabChars);
         $note->titre = $rq->titre;
-        $note->texte = $rq->texte;
+        $note->texte = htmlspecialchars($rq->texte);
         $note->save();
 
 
@@ -186,19 +189,22 @@ class NoteController extends Controller
     }
 
     public function dislikes($noteId){
-        $tabUserLiked = [];
+        $tabUserDisliked = [];
         $userId = Auth::user()->id;
-        $noteUserLiked = NoteUserliked::where('note_id','=',$noteId)->get();
-        foreach( $noteUserLiked as  $rowLine){
-            array_push($tabUserLiked,$rowLine->user_id);
-        }
-        if(in_array($userId,$tabUserLiked)){
-            
-            $rowLine =  NoteUserliked::where('note_id','=',$noteId)->where('user_id','=',$userId);
-            $rowLine->delete();
+        $noteUserDisliked = NoteUserdisliked::where('note_id','=',$noteId)->get();
+        foreach( $noteUserDisliked as  $rowLine){
+            array_push($tabUserDisliked,$rowLine->user_id);
         }
 
+        if(!in_array($userId,$tabUserDisliked)){
+            $noteUserDisliked = new NoteUserdisliked;
+            $noteUserDisliked->note_id = $noteId;
+            $noteUserDisliked->user_id = $userId;
+            $noteUserDisliked->save();
+        }
+        
         return redirect()->back() ;
+
     }
 
 
@@ -233,6 +239,15 @@ class NoteController extends Controller
         }
 
         return redirect()->back()->with($tag,$msg);
+    }
+
+    public function filter(Request $rq){
+        // dd($rq->nom);
+          $notes =Note::select("notes.*",DB::raw('count(note_userlikeds.id) as nbLike'))->join("note_userlikeds","note_userlikeds.note_id","=","notes.id","left outer")->join("note_tags","note_tags.note_id","=","notes.id")->join("tags","tags.id","=","note_tags.tag_id")->where('tags.nom','=',$rq->nom)->groupBy("notes.id")->orderBy("nbLike","desc")->get();
+
+        //   dd($notes);
+
+        return view('front.pages.index',compact('notes'));
     }
 
 

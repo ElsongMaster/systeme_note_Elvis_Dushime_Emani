@@ -19,6 +19,10 @@ class Note extends Model
         return $this->belongsToMany(User::class,'note_userlikeds','note_id','user_id');
 
     }
+    public function usersdislikeds(){
+        return $this->belongsToMany(User::class,'note_userdislikeds','note_id','user_id');
+
+    }
 
     public function users(){
         return $this->belongsToMany(User::class, 'rolenote_user_notes','note_id','user_id');

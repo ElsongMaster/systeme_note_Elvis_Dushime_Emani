@@ -8,6 +8,7 @@
         <meta content="" name="description">
         <meta content="" name="keywords">
 
+    <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
 
          <link href="{{asset('vendor/boxicons/css/boxicons.min.css')}}" rel="stylesheet">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
@@ -49,7 +50,6 @@
         {{-- @include("back.partials.footer") --}}
 
 
-
    <script src="{{asset('js/app.js')}}"></script>
    <script src="{{asset('js/tailwind.js')}}"></script>
 
@@ -58,9 +58,26 @@
         console.log(tabBtnCloses);
     tabBtnCloses.forEach((elt) => {
         elt.addEventListener("click", () => {
-            elt.parentNode.classList.add("hidden");
+            elt.parentNode.classList.add(".hidden-elt");
         });
     });
+
+       if(document.querySelectorAll('.ckeditor') != undefined) {
+           var stringToHTML = function (str) {
+                var parser = new DOMParser();
+                var doc = parser.parseFromString(str, 'text/html');
+                return doc.body;
+            };
+            var Tabnode = Array.from(document.getElementsByClassName('ckeditor'));
+            Tabnode.forEach(pnode =>{
+
+                var node = stringToHTML(pnode.textContent);
+    
+                pnode.innerHTML = node.innerHTML;
+            })
+ 
+
+        }  
 
 </script>
 
@@ -70,7 +87,7 @@
             transition: 0.5s;
         }
 
-        .hidden{
+        .hidden-elt{
             display:none;
         }
     </style>

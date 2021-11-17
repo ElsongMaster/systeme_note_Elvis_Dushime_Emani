@@ -22,7 +22,7 @@
                 <div class="card" style="width: 100%;">
                     <div class="card-body">
                         <h5 class="card-title text-center">{{$note->titre}}</h5>
-                        <p class="card-text text-center">{{$note->texte}}</p>
+                        <p class="card-text text-center ckeditor">{{html_entity_decode($note->texte)}}</p>
                         <div class="tagContent d-flex justify-content-between w-25 mx-auto">
                             @foreach ($note->tags as $tag )
                                 
