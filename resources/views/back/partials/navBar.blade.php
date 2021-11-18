@@ -42,7 +42,7 @@
 
         <li class="border border-light w-100 mt-2"></li>
         <li class="mt-3">
-            <a href="/index">
+            <a href="{{route('index')}}">
                 <i class='bx bx-home'></i>
                 <span class="tooltip">front</span>
             </a>

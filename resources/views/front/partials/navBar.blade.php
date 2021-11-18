@@ -1,9 +1,12 @@
 <nav class="d-flex justify-content-end  w-100 sticky-top" >
-    <ul class="navbar  list-unstyled w-50 ">
+    <ul class="navbar  list-unstyled  " width="60%">
         <li class="nav-item"><a class="nav-link" href="{{route('index')}}">Globale</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{route('notespersos')}}">Notes persos </a></li>
-        <li class="nav-item"><a class="nav-link" href="{{route('notespartagees')}}">Notes partagée</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{route('noteslikees')}}">Notes likés</a></li>
+        @can('user_connected')
+          
+          <li class="nav-item"><a class="nav-link" href="{{route('notespersos')}}">Notes persos </a></li>
+          <li class="nav-item"><a class="nav-link" href="{{route('notespartagees')}}">Notes partagée</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{route('noteslikees')}}">Notes likés</a></li>
+        @endcan
 
         @if (Route::has('login'))
             @auth

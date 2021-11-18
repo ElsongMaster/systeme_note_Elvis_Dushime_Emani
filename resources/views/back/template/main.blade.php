@@ -11,6 +11,7 @@
     <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
 
          <link href="{{asset('vendor/boxicons/css/boxicons.min.css')}}" rel="stylesheet">
+
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>

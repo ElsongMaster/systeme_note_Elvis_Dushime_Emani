@@ -1,4 +1,4 @@
-@extends('back.template.main')
+@extends('front.template.main')
 
 
 
@@ -7,7 +7,7 @@
 
 
 
-@section('backContent')
+@section('content')
 <div class="container d-flex flex-column  mb-2 w-75">
 
 @if ($errors->any())
@@ -37,7 +37,7 @@
     <input type="text" value = "{{$note->texte}}"   class="form-control" id="texte" name="texte" >
 </div> --}}
 
-<textarea  name="texte">{{$note->texte}}</textarea>
+<textarea  name="texte" class="ckeditor">{{$note->texte}}</textarea>
 <script>
         CKEDITOR.replace( 'texte' );
 </script>

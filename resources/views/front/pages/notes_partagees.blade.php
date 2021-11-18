@@ -9,7 +9,6 @@
 
 
 
-    <a href="{{route('notes.create')}}" class="btn btn-info">créer une note</a>
 
     <div class="container-fluid">
         <h2>Liste des notes</h2>
@@ -23,7 +22,7 @@
                     </div>
                     <div class="card-body">
                         <h5 class="card-title text-center">{{$note->titre}}</h5>
-                        <p class="card-text text-center">{{$note->texte}}</p>
+                        <p class="card-text text-center ckeditor">{{html_entity_decode($note->texte)}}</p>
                         <div class="tagContent d-flex justify-content-evenly flex-wrap w-25 mx-auto">
                             @foreach ($note->tags as $tag )
                                 
@@ -32,10 +31,12 @@
                             @endforeach
                         </div>
                         <div class="contentLike d-flex justify-content-evenly w-25 mx-auto pt-3">
-    
-                            <a href="{{Auth::check()?route('notes.like',$note->id):route('login')}}" id="like" class="btn btn-info "><i class="far fa-thumbs-up text-light pe-1"></i>+1</a>
-                            <span id="cpt" class=" fs-4">{{$note->userslikeds->count()}}</span>
-                            <a href="{{Auth::check()?route('notes.dislike',$note->id):route('login')}}" id="dislike" class="btn btn-info"><i class="far fa-thumbs-down text-light pe-1"></i>-1</a>
+
+        
+                                <a href="{{Auth::check()?route('notes.like',$note->id):route('login')}}" id="like" class="btn btn-info "><i class="far fa-thumbs-up text-light pe-1"></i>+1</a>
+                                <span id="cpt" class=" fs-4">{{$note->userslikeds->count()}}</span>
+                                <a href="{{Auth::check()?route('notes.dislike',$note->id):route('login')}}" id="dislike" class="btn btn-info"><i class="far fa-thumbs-down text-light pe-1"></i>-1</a>
+                                <span id="cpt" class=" fs-4 text-secondary">{{$note->usersdislikeds->count()}}</span>
                         </div>
                         <div class="d-flex justify-content-center mt-3 w-50 mx-auto">
 

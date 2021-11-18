@@ -23,6 +23,7 @@ class NoteController extends Controller
      */
     public function index()
     {
+
           $notes =Note::select("notes.*",DB::raw('count(note_userlikeds.id) as nbLike'))->join("note_userlikeds","note_userlikeds.note_id","=","notes.id","left outer")->groupBy("notes.id")->orderBy("nbLike","desc")->get();
 
         return view('back.note.allnote',compact('notes'));
@@ -88,7 +89,7 @@ class NoteController extends Controller
      */
     public function show(Note $note)
     {
-        //
+        return view('back.note.show',compact('note'));
     }
 
     /**
@@ -242,12 +243,15 @@ class NoteController extends Controller
     }
 
     public function filter(Request $rq){
-        // dd($rq->nom);
-          $notes =Note::select("notes.*",DB::raw('count(note_userlikeds.id) as nbLike'))->join("note_userlikeds","note_userlikeds.note_id","=","notes.id","left outer")->join("note_tags","note_tags.note_id","=","notes.id")->join("tags","tags.id","=","note_tags.tag_id")->where('tags.nom','=',$rq->nom)->groupBy("notes.id")->orderBy("nbLike","desc")->get();
+        $tab = [];
+        if(str_contains($rq->nom,',')){
+          $tab = explode(',',$rq->nom);
+        }else{
+            array_push($tab,$rq->nom);
+        }
+          $notes =Note::select("notes.*",DB::raw('count(note_userlikeds.id) as nbLike'))->join("note_userlikeds","note_userlikeds.note_id","=","notes.id","left outer")->join("note_tags","note_tags.note_id","=","notes.id")->join("tags","tags.id","=","note_tags.tag_id")->whereIn('tags.nom',$tab)->groupBy("notes.id")->orderBy("nbLike","desc")->get();
 
-        //   dd($notes);
-
-        return view('front.pages.index',compact('notes'));
+        return redirect()->back()->with(['notes'=>$notes]);
     }
 
 
