@@ -51,32 +51,65 @@
 
 @section('content')
     <div class="container-fluid">
+        <h1 class="text-decoration-underline">Détails de la note</h1>
         <div class="wrapper">
-        <h1>Parallax Flipping Cards</h1>
         <div class="cols">
             <div class="col" ontouchstart="this.classList.toggle('hover');">
                 <div class="container">
                 <div class="front" style="background-image: url(https://unsplash.it/500/500/)">
                     <div class="inner">
-                    <p>Diligord</p>
-                    <span>Lorem ipsum</span>
+                        <p>{{$note->titre}}</p>
+                        <span>Auteur:</span> {{App\Models\User::find($note->auteurId)->name}}</span>
+                        <div class="content_tags">
+                            @foreach ($note->tags as $tag )
+                                <span class="tag rounded-full py-3 px-6..">#{{$tag->nom}}</span>
+                            @endforeach
+                        </div>
                     </div>
                 </div>
                 <div class="back">
                     <div class="inner">
-                    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Alias cum repellat velit quae suscipit c.</p>
-                    <div class="contentLike d-flex justify-content-evenly w-25 mx-auto pt-3" style="z-index: 3;">
+                        @if ($note->shared)
+                            
+                        <div class="content-shared d-flex mt-3">
+                            
+                           <p class="w-50 text-start"> partagé:<i class="fas fa-check-circle text-success fs-3"></i>
+                        </p>
+                        @if ($editeur != null)
+                            
+                            <p class="text-end w-50"><span class="text-decoration-underline">Editeur:</span>{{$editeur->name}} </p>
+                        @endif
+                        </div>                            
+                        @endif
+                        <p class="ckeditor">{{html_entity_decode($note->texte)}}</p>
+                        <div class="contentLike d-flex justify-content-evenly w-50 mx-auto pt-3" style="z-index: 3;">
+                            <div class="btnLike d-flex">
 
-                        <a href="{{Auth::check()?route('notes.like',$note->id):route('login')}}" id="like" class="btn btn-info "><i class="far fa-thumbs-up text-light pe-1"></i>+1</a>
-                        <span id="cpt" class=" fs-4">{{$note->userslikeds->count()}}</span>
-                        <a href="{{Auth::check()?route('notes.dislike',$note->id):route('login')}}" id="dislike" class="btn btn-info"><i class="far fa-thumbs-down text-light pe-1"></i>-1</a>
-                        <span id="cpt" class=" fs-4 text-secondary">{{$note->usersdislikeds->count()}}</span>
-                    </div>
+                                <a href="{{Auth::check()?route('notes.like',$note->id):route('login')}}" id="like" class="btn btn-info "><i class="far fa-thumbs-up text-light pe-1"></i>+1</a>
+                                <span id="cpt" class=" fs-4 d-flex justify-content-center align-items-center ms-1"> {{$note->userslikeds->count()}}</span>
+                            </div>
+
+                            <div class="btnUnLike d-flex">
+
+                                <a href="{{Auth::check()?route('notes.dislike',$note->id):route('login')}}" id="dislike" class="btn btn-info"><i class="far fa-thumbs-down text-light pe-1"></i>-1</a>
+                                <span id="cpt" class=" fs-4 text-secondary text-center d-flex justify-content-center align-items-center ms-1"> {{$note->usersdislikeds->count()}}</span>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center mt-3 w-50 mx-auto">
+
+                            <button  href="" class="btn btn-secondary share">Share</button>
+                        </div>
+                        <form  action="{{route('notes.share',$note->id)}}" method="post" class="formShare hidden">
+                            @csrf
+                            <div class="form-line d-flex  mt-2 " style="width: 70%">
+                                <label class="pt-2 pe-2" for="email">Email:</label><input placeholder="Entrer une adresse mail" type="text" name="email"><button type="submit" class="btn btn-primary ps-1">submit</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
                 </div>
             </div>
-            <div class="col" ontouchstart="this.classList.toggle('hover');">
+            {{-- <div class="col" ontouchstart="this.classList.toggle('hover');">
                 <div class="container">
                 <div class="front" style="url(https://unsplash.it/511/511/)">
                     <div class="inner">
@@ -181,7 +214,7 @@
                     </div>
                 </div>
                 </div>
-            </div>
+            </div> --}}
             </div>
         </div>
 
@@ -196,7 +229,7 @@
         }
 
         h1{
-        font-size: 2.5rem;
+        font-size: 2rem;
         font-family: 'Montserrat';
         font-weight: normal;
         color: #444;
@@ -219,10 +252,14 @@
         -webkit-box-pack: center;
             -ms-flex-pack: center;
                 justify-content: center;
+        width: 100%;
+        margin: auto;
+        
         }
 
         .col{
         flex-basis: 300px !important;
+        width: 30%!important;
         margin: 1rem;
         cursor: pointer;
         }
@@ -336,6 +373,23 @@
         -webkit-transform-style: preserve-3d;
                 transform-style: preserve-3d;
         }
+
+        .front .content_tags{
+            display: flex;
+            justify-content: space-evenly;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .front .content_tags .tag{
+            margin: 0 auto;
+            flex-basis: 100px;
+            width: 100px;
+            border-radius: 50%;
+            background-color: rgb(199, 199, 199);
+            color: #444;
+        }
+
+
 
         .front .inner p{
         font-size: 2rem;

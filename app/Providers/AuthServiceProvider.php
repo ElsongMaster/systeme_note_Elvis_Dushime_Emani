@@ -32,12 +32,13 @@ class AuthServiceProvider extends ServiceProvider
          Gate::define('editeur_note', function($userConnected,$noteID){
            return count(RolenoteUserNote::where('user_id',$userConnected->id)->where('note_id',$noteID)->where('rolenote_id',2)->get())>0 || count(RolenoteUserNote::where('user_id',$userConnected->id)->where('note_id',$noteID)->where('rolenote_id',1)->get())>0  ;
          });
+         Gate::define('auteur_note', function($userConnected,$noteID){
+           return  count(RolenoteUserNote::where('user_id',$userConnected->id)->where('note_id',$noteID)->where('rolenote_id',1)->get())>0  ;
+         });
          Gate::define('user_connected', function(){
            return Auth::check()  ;
          });
-        //  Gate::define('screen_mobile', function(){
-        //    return !str_contains(request()->header('user-agent'),'Mobile') ;
-        //  });
+
 
     }
 }

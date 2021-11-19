@@ -24,6 +24,7 @@ class NoteController extends Controller
     public function index()
     {
 
+        
           $notes =Note::select("notes.*",DB::raw('count(note_userlikeds.id) as nbLike'))->join("note_userlikeds","note_userlikeds.note_id","=","notes.id","left outer")->groupBy("notes.id")->orderBy("nbLike","desc")->get();
 
         return view('back.note.allnote',compact('notes'));
@@ -89,7 +90,14 @@ class NoteController extends Controller
      */
     public function show(Note $note)
     {
-        return view('back.note.show',compact('note'));
+        $editeur = RolenoteUserNote::select('user_id')->where('note_id',$note->id)->where('user_id',Auth::user()->id)->where('rolenote_id',2)->get();
+        if(count($editeur)>0){
+            $editeur = User::find($editeur[0]->user_id);
+        }else{
+            $editeur = null;
+        }
+        // dd($editeur);
+        return view('back.note.show',compact('note','editeur'));
     }
 
     /**
@@ -158,6 +166,7 @@ class NoteController extends Controller
      */
     public function destroy(Note $note)
     {
+        $this->authorize('auteur_note',$note->id);
         $notesToDelete = RolenoteUserNote::where('note_id','=',$note->id)->get();
         foreach($notesToDelete as $rowData){
             $rowData->delete();

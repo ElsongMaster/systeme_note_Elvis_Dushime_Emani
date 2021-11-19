@@ -51,7 +51,7 @@
         {{-- @include("back.partials.footer") --}}
 
 
-   <script src="{{asset('js/app.js')}}"></script>
+   {{-- <script src="{{asset('js/app.js')}}"></script> --}}
    <script src="{{asset('js/tailwind.js')}}"></script>
 
 <script type="text/javascript">

@@ -30,12 +30,19 @@
 
                             @endforeach
                         </div>
-                        <form action="{{route('notes.destroy', $note->id)}}" method="POST" class="d-flex justify-content-center">
-                            @method('DELETE')
-                            @csrf
-                                <a href="{{route('notes.edit',$note->id)}}" class="btn btn-warning my-2 mr-2"><i class="fas fa-edit"></i></a>
+                        <div class="d-flex justify-content-evenly w-25 mx-auto">
+                            @can('auteur_note',$note->id)
+                                
+                            
+                            <form action="{{route('notes.destroy', $note->id)}}" method="POST" class="d-flex justify-content-center">
+                                @method('DELETE')
+                                @csrf
                                 <button type="submit" class="btn btn-danger my-2"><i class="fas fa-trash-alt"></i></button>
-                        </form>
+
+                            </form>
+                            @endcan
+                            <a href="{{route('notes.edit',$note->id)}}" class="btn btn-warning my-2 mr-2"><i class="fas fa-edit"></i></a>
+                        </div>
                     </div>
 
                     

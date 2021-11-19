@@ -74,13 +74,20 @@
 
     </script>
     <style>
-        #formShare{
+        .formShare{
             transition: 0.2s;
+            display: flex;
+            justify-content: center;
         }
 
+
+
         .hidden{
-            display:none;
+            visibility:hidden;
         }
+        /* .show{
+            visibility: visible;
+        } */
     </style>
 </body>
 </html>
